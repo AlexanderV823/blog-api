@@ -27,4 +27,4 @@ read -p "Нажмите [Enter], чтобы открыть редактор nano
 sudo nano .env
 
 echo "=== 5. Запуск Docker Compose ==="
-sudo docker compose up -d --build
+docker compose up -d --build && docker compose logs -f app
