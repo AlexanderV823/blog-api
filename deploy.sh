@@ -27,4 +27,11 @@ read -p "Нажмите [Enter], чтобы открыть редактор nano
 sudo nano .env
 
 echo "=== 5. Запуск Docker Compose ==="
-docker compose up -d --build && docker compose logs -f app
+docker compose up -d --build
+
+echo "Ожидаем запуск контейнеров и подключаемся к логам..."
+# Делаем небольшую паузу в 3 секунды, чтобы Docker успел инициализировать контейнер
+sleep 3
+
+# Выводим логи в режиме реального времени
+docker compose logs -f app
