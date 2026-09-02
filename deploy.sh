@@ -5,8 +5,8 @@ echo "=== 1. Подготовка рабочей директории ==="
 sudo mkdir -p /var/www && cd /var/www
 
 echo "=== 2. Скачивание конфигураций с GitHub ==="
-sudo curl -sSLO https://github.com/AlexanderV823/blog-api/blob/main/docker-compose.yml
-sudo curl -sSLO https://github.com/AlexanderV823/blog-api/blob/main/.env.example
+sudo curl -sSLO https://raw.githubusercontent.com/AlexanderV823/blog-api/main/docker-compose.yml
+sudo curl -sSLO https://raw.githubusercontent.com/AlexanderV823/blog-api/main/.env.example
 
 echo "=== 3. Инициализация .env и генерация JWT_SECRET ==="
 sudo cp .env.example .env
