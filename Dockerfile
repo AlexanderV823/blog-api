@@ -20,5 +20,8 @@ WORKDIR /root/
 # Забираем готовый бинарник из этапа сборки
 COPY --from=builder /app/main .
 
+# Копируем папку с фронтендом
+COPY --from=builder /app/web ./web
+
 # Запуск приложения
 CMD ["./main"]
