@@ -2,7 +2,7 @@
 # Скрипт автоматического развертывания Blog-API
 
 echo "=== 1. Подготовка рабочей директории ==="
-sudo mkdir -p /var/www && cd /var/www
+sudo mkdir -p /var/www && sudo chown $USER:$USER /var/www && cd /var/www
 
 echo "=== 2. Скачивание конфигураций с GitHub ==="
 sudo curl -sSLO https://raw.githubusercontent.com/AlexanderV823/blog-api/main/docker-compose.yml
