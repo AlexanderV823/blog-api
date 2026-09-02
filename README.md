@@ -49,33 +49,67 @@
 
 ```text
 .
-├── cmd
-│   └── api
-│       └── main.go            # Точка входа, загрузка конфига, сборка DI и раздача статики
-├── internal
-│   ├── handler                # Слой HTTP-обработчиков (маскирование ошибок 5xx)
-│   ├── middleware             # Recovery, RequestID, CORS и потокобезопасный RateLimiter
-│   ├── model                  # DTO структуры запросов/ответов и сущности БД
-│   ├── repository             # Реализация SQL-операций для СУБД
-│   └── service                # Бизнес-логика, изолированная интерфейсами
-├── pkg
-│   ├── auth                   # JWT-менеджер и bcrypt-хеширование паролей
-│   └── database
-│       ├── migrations
-│       │   └── init_schema.sql# Единый SQL-файл структуры таблиц (Источник истины)
-│       └── postgres.go        # Логика пула БД и атомарных миграций через go:embed
-├── web                        # Модульный веб-интерфейс (SPA)
-│   ├── index.html             # HTML-каркас приложения
-│   ├── css
-│   │   └── style.css          # Современные CSS-стили и UI-компоненты
-│   └── js
-│       ├── api.js             # Сетевой слой (Fetch API, сессии, маскирование ошибок)
-│       └── app.js             # Фронтенд-контроллер роутинга и рендеринга данных
-├── .env                       # Конфигурационный файл окружения
-├── docker-compose.yml         # Манифест инфраструктуры Docker
-├── Makefile                   # Скрипты автоматизации сборки, форматирования и тестов
-├── go.mod                     # Модули и зависимости Go
-└── go.sum                     # Контрольные суммы зависимостей
+├── cmd/
+│   └── api/
+│       └── main.go                  # Точка входа и инициализация HTTP-сервера
+├── internal/
+│   ├── handler/
+│   │   ├── auth_handler_test.go     # Тесты авторизации
+│   │   ├── auth_handler.go          # Обработчик регистрации и входа
+│   │   ├── comment_handler.go       # Обработчик CRUD комментариев
+│   │   ├── handler_middleware_test.go # Тесты handler-middleware
+│   │   ├── json.go                  # Хелпер для парсинга и валидации JSON
+│   │   └── post_handler.go          # Обработчик CRUD публикаций
+│   ├── middleware/
+│   │   ├── auth.go                  # Middleware JWT-авторизации
+│   │   ├── logging.go               # Middleware логирования и recovery
+│   │   └── rate_limiter.go          # Middleware Token Bucket Rate Limiter
+│   ├── model/
+│   │   └── models.go                # DTO и структуры сущностей базы данных
+│   ├── repository/
+│   │   ├── comment_repo.go          # SQL-операции для комментариев
+│   │   ├── errors.go                # Общие ошибки репозиториев
+│   │   ├── interfaces.go            # Интерфейсы слоя хранения данных
+│   │   ├── post_repo.go             # SQL-операции для публикаций
+│   │   ├── repository_test.go       # Интеграционные/Unit тесты БД
+│   │   └── user_repo.go             # SQL-операции для пользователей
+│   └── service/
+│       ├── comment_service_test.go  # Тесты бизнес-логики комментариев
+│       ├── comment_service.go       # Сервис комментариев (валидация связей)
+│       ├── interfaces.go            # Интерфейсы бизнес-логики (DI)
+│       ├── post_service_test.go     # Тесты бизнес-логики публикаций
+│       ├── post_service.go          # Сервис публикаций (контроль прав)
+│       ├── user_service_test.go     # Тесты бизнес-логики пользователей
+│       └── user_service.go          # Сервис пользователей (хэширование, JWT)
+├── pkg/
+│   ├── auth/
+│   │   ├── jwt_test.go              # Тесты генерации и валидации токенов
+│   │   ├── jwt.go                   # Логика работы с JWT (HS256)
+│   │   └── password.go              # Хелперы хэширования паролей bcrypt
+│   └── database/
+│       ├── migrations/
+│       │   └── init_schema.sql      # SQL-скрипт структуры таблиц схемы
+│       ├── migrations_test.go       # Тесты автоматических транзакционных миграций
+│       └── postgres.go              # Инициализация пула БД и логика go:embed
+├── web/                             # Модульный веб-интерфейс (SPA)
+│   ├── css/
+│   │   └── style.css                # Современные CSS-стили интерфейса
+│   ├── js/
+│   │   ├── api.js                   # Сетевой слой фронтенда (Fetch API)
+│   │   └── app.js                   # Клиентский контроллер и роутинг
+│   └── index.html                   # Главный HTML-каркас приложения
+├── .env                             # Локальные переменные окружения (секреты)
+├── .env.example                     # Шаблон конфигурации для деплоя
+├── .gitignore                       # Список исключений для Git
+├── api.log                          # Локальный файл журналов сервера
+├── deploy.sh                        # Скрипт автоматического деплоя на Debian
+├── docker-compose.yml               # Конфигурация инфраструктуры Docker
+├── Dockerfile                       # Инструкция многоэтапной сборки Go
+├── go.mod                           # Модули и зависимости проекта
+├── go.sum                           # Контрольные суммы зависимостей Go
+├── Makefile                         # Скрипты автоматизации разработки (make dev)
+├── README.md                        # Главный файл документации проекта
+└── test_api.sh                      # Скрипт сквозного E2E тестирования API
 ```
 
 ---
