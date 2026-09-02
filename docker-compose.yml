@@ -2,20 +2,27 @@ version: '3.8'
 
 services:
   app:
-    image: your-dockerhub-login/blog-api:latest # Замените на ваш Docker Hub репозиторий
+    build: .
     container_name: blog_api
     ports:
-      - "8080:8080"
+      - "${SERVER_PORT}:8080"
     environment:
-      - DB_HOST=postgres
-      - DB_PORT=5432
+      - SERVER_PORT=8080
+      - SERVER_HOST=0.0.0.0
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
       - DB_USER=${DB_USER}
       - DB_PASSWORD=${DB_PASSWORD}
       - DB_NAME=${DB_NAME}
-      # Сюда же можно передать JWT_SECRET или другие переменные, если они нужны
+      - DB_SSL_MODE=${DB_SSL_MODE}
+      - JWT_SECRET=${JWT_SECRET}
+      - JWT_EXPIRY_HOURS=${JWT_EXPIRY_HOURS}
+      - APP_ENV=${APP_ENV}
+      - LOG_LEVEL=${LOG_LEVEL}
+      - CACHE_TTL_MINUTES=${CACHE_TTL_MINUTES}
     depends_on:
       postgres:
-        condition: service_healthy # Ждем, пока Postgres поднимется и пройдет проверку
+        condition: service_healthy
     restart: unless-stopped
 
   # База данных PostgreSQL
@@ -30,19 +37,20 @@ services:
       - "${DB_PORT}:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./migrations:/docker-entrypoint-initdb.d
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      test: ["CMD-SHELL", "pg_isready -U $${DB_USER} -d $${DB_NAME}"]
       interval: 10s
       timeout: 5s
       retries: 5
     restart: unless-stopped
 
-  # Утилита Adminer
+  # Веб-интерфейс Adminer
   adminer:
     image: adminer:latest
     container_name: blog_adminer
     ports:
-      - "8081:8080"
+      - "${ADMINER_PORT}:8080"
     environment:
       ADMINER_DEFAULT_SERVER: postgres
     depends_on:
