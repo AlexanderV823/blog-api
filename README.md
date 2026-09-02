@@ -82,18 +82,7 @@
 
 ## 💻 Быстрый старт
 
-### 1. Скачивание и запуск скрипта автоматического запуска
-
-```
-# Скачивание и запуск скрипта
-sudo curl -sSLO https://raw.githubusercontent.com/AlexanderV823/blog-api/main/deploy.sh && \
-# Права на выполнение скрипта
-sudo chmod +x deploy.sh && \
-# Запуск скрипта
-./deploy.sh
-```
-
-### 2. Подготовка конфигурации
+### 1. Подготовка конфигурации для локального запуска
 Перед запуском создайте файл `.env` в корневой папке проекта:
 
 ```env
@@ -118,7 +107,7 @@ JWT_SECRET=super-secure-random-secret-key-32-chars
 JWT_EXPIRY_HOURS=24
 ```
 
-### 3. Запуск приложения
+### 2. Запуск приложения
 
 #### Вариант А. Автоматизированный локальный запуск через `Makefile`
 ```bash
@@ -139,21 +128,18 @@ make dev
 Если вы разворачиваете проект на чистом сервере, вам не нужно скачивать репозиторий целиком. Перейдите в терминал сервера и выполните команду, которая создаст структуру папок, скачает манифесты, сгенерирует криптографически стойкий `JWT_SECRET` с помощью `openssl` и откроет настройки окружения:
 
 ```bash
-sudo mkdir -p /var/www && cd /var/www && \
-sudo curl -sSLO https://raw.githubusercontent.com/AlexanderV823/blog-api/main/docker-compose.yml && \
-sudo curl -sSLO https://raw.githubusercontent.com/AlexanderV823/blog-api/main/.env.example && \
-sudo cp .env.example .env && \
-sudo sed -i "s/^JWT_SECRET=.*/JWT_SECRET=\$(openssl rand -hex 32)/" .env && \
-sudo nano .env
+# Скачивание и запуск скрипта
+sudo curl -sSLO https://raw.githubusercontent.com/AlexanderV823/blog-api/main/deploy.sh && \
+# Права на выполнение скрипта
+sudo chmod +x deploy.sh && \
+# Запуск скрипта
+./deploy.sh
 ```
 
 **После выполнения команды:**
 1. В открывшемся редакторе `nano` измените `DB_HOST=localhost` на `DB_HOST=postgres`.
 2. Укажите ваш собственный `DB_PASSWORD`.
-3. Сохраните изменения (`Ctrl+O`, `Enter`, `Ctrl+X`) и запустите проект:
-```bash
-docker compose up -d --build
-```
+3. Сохраните изменения (`Ctrl+O`, `Enter`, `Ctrl+X`) и проект сам запустится и выведет логи в консоль.
 
 ---
 
