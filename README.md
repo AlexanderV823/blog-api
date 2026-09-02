@@ -86,10 +86,7 @@
 
 ```
 # Скачивание и запуск скрипта
-sudo curl -sSLO https://github.com/AlexanderV823/blog-api/blob/main/deploy.sh | bash
-```
-```
-&& \
+sudo curl -sSLO https://raw.githubusercontent.com/AlexanderV823/blog-api/main/deploy.sh && \
 # Права на выполнение скрипта
 sudo chmod +x deploy.sh && \
 # Запуск скрипта
@@ -143,8 +140,8 @@ make dev
 
 ```bash
 sudo mkdir -p /var/www && cd /var/www && \
-sudo curl -sSLO https://github.com/AlexanderV823/blog-api/blob/main/docker-compose.yml && \
-sudo curl -sSLO https://github.com/AlexanderV823/blog-api/blob/main/.env.example && \
+sudo curl -sSLO https://raw.githubusercontent.com/AlexanderV823/blog-api/main/docker-compose.yml && \
+sudo curl -sSLO https://raw.githubusercontent.com/AlexanderV823/blog-api/main/.env.example && \
 sudo cp .env.example .env && \
 sudo sed -i "s/^JWT_SECRET=.*/JWT_SECRET=\$(openssl rand -hex 32)/" .env && \
 sudo nano .env
