@@ -98,6 +98,10 @@ DB_PASSWORD=blogpassword
 DB_NAME=blogdb
 DB_SSL_MODE=disable
 
+# Порты для фронтэнда и панели администрирования БД
+FRONTEND_PORT=5080
+ADMINER_PORT=5081
+
 # Безопасность (JWT)
 JWT_SECRET=super-secure-random-secret-key-32-chars
 JWT_EXPIRY_HOURS=24
