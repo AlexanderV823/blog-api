@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SanekBlog - Пространство Мыслей</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+
+<body>
+
+    <!-- Шапка приложения -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" onclick="showFeed()" class="nav-logo">SanekBlog</a>
+            <div id="nav-auth" class="nav-auth-block"></div>
+        </div>
+    </nav>
+
+    <!-- Основной контент -->
+    <main class="main-container">
+        <!-- Зона глобальных уведомлений -->
+        <div id="alert-zone" class="alert hidden"></div>
+
+        <!-- 1. ЭКРАН: ЛЕНТА ПОСТОВ -->
+        <section id="view-feed" class="view-section">
+            <div class="section-header">
+                <h1>Публикации сообщества</h1>
+                <button id="btn-new-post" onclick="switchView('view-create-post')"
+                    class="btn btn-primary hidden">Создать пост</button>
+            </div>
+            <div id="posts-container" class="posts-grid"></div>
+        </section>
+
+        <!-- 2. ЭКРАН: ДЕТАЛЬНЫЙ ПРОСМОТР ПОСТА -->
+        <section id="view-post" class="view-section hidden">
+            <button onclick="showFeed()" class="btn-back">&larr; Вернуться в ленту</button>
+            <article id="post-content" class="post-card-full"></article>
+
+            <div class="comments-section">
+                <h3>Комментарии</h3>
+                <div id="comment-form-container" class="hidden">
+                    <form onsubmit="handleCreateComment(event)" class="comment-form">
+                        <textarea id="input-comment" rows="3" placeholder="Напишите ваш комментарий..."
+                            required></textarea>
+                        <button type="submit" class="btn btn-dark">Отправить</button>
+                    </form>
+                </div>
+                <div id="comments-container" class="comments-list"></div>
+            </div>
+        </section>
+
+        <!-- 3. ЭКРАН: АВТОРИЗАЦИЯ -->
+        <section id="view-auth" class="view-section hidden">
+            <div class="auth-card">
+                <h2 id="auth-title">Вход в аккаунт</h2>
+                <form onsubmit="handleAuth(event)" class="form-group">
+                    <div id="auth-username-group" class="hidden">
+                        <label>Имя пользователя</label>
+                        <input type="text" id="auth-username">
+                    </div>
+                    <div>
+                        <label>Email адрес</label>
+                        <input type="email" id="auth-email" required>
+                    </div>
+                    <div>
+                        <label>Пароль</label>
+                        <input type="password" id="auth-password" required>
+                    </div>
+                    <button type="submit" id="auth-submit-btn" class="btn btn-primary btn-block">Войти</button>
+                </form>
+                <p class="auth-toggle-text">
+                    <span id="auth-toggle-label">Еще нет аккаунта?</span>
+                    <a href="#" onclick="toggleAuthMode()" id="auth-toggle-link">Зарегистрироваться</a>
+                </p>
+            </div>
+        </section>
+
+        <!-- 4. ЭКРАН: СОЗДАНИЕ ПОСТА -->
+        <section id="view-create-post" class="view-section hidden">
+            <div class="create-post-card">
+                <h2>Новая публикация</h2>
+                <form onsubmit="handleCreatePost(event)" class="form-group">
+                    <div>
+                        <label>Заголовок статьи (от 5 символов)</label>
+                        <input type="text" id="post-title" required>
+                    </div>
+                    <div>
+                        <label>Содержимое публикации (от 10 символов)</label>
+                        <textarea id="post-body" rows="10" required></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Опубликовать</button>
+                        <button type="button" onclick="showFeed()" class="btn btn-secondary">Отмена</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        &copy; 2026 AlexanderV823. Частный блог.
+    </footer>
+
+    <!-- Подключаем скрипты в строгой последовательности -->
+    <script src="/static/js/api.js"></script>
+    <script src="/static/js/app.js"></script>
+</body>
+
+</html>

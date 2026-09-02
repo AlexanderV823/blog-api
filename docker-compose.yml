@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  app:
+    image: your-dockerhub-login/blog-api:latest # Замените на ваш Docker Hub репозиторий
+    container_name: blog_api
+    ports:
+      - "8080:8080"
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      # Сюда же можно передать JWT_SECRET или другие переменные, если они нужны
+    depends_on:
+      postgres:
+        condition: service_healthy # Ждем, пока Postgres поднимется и пройдет проверку
+    restart: unless-stopped
+
+  # База данных PostgreSQL
+  postgres:
+    image: postgres:15-alpine
+    container_name: blog_postgres
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - "${DB_PORT}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # Утилита Adminer
+  adminer:
+    image: adminer:latest
+    container_name: blog_adminer
+    ports:
+      - "8081:8080"
+    environment:
+      ADMINER_DEFAULT_SERVER: postgres
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+    name: blog_postgres_data
