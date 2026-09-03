@@ -80,7 +80,7 @@ func (rw *responseWriter) Write(b []byte) (int, error) {
 	return n, err
 }
 
-// Logger записывает детальную информацию о каждом HTTP-запросе
+// Logger записывает детальную информацию о каждом HTTP-запросе с учетом IP-адреса клиента
 func (m *LoggingMiddleware) Logger(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		start := time.Now()
@@ -88,9 +88,18 @@ func (m *LoggingMiddleware) Logger(next http.Handler) http.Handler {
 
 		next.ServeHTTP(rw, r)
 
+		// 1. Извлекаем реальный IP-адрес клиента
+		// Сначала проверяем заголовок X-Forwarded-For (на случай использования Nginx/Cloudflare)
+		ip := r.Header.Get("X-Forwarded-For")
+		if ip == "" {
+			// Если заголовка нет, берем прямой сетевой адрес из запроса
+			ip = r.RemoteAddr
+		}
+
+		// 2. Выводим лог, добавляя значение IP в начало записи
 		m.logger.Printf(
-			"[INFO] %s %s | Status: %d | Size: %d bytes | Duration: %s",
-			r.Method, r.URL.Path, rw.status, rw.size, time.Since(start),
+			"[INFO] IP: %s | %s %s | Status: %d | Size: %d bytes | Duration: %s",
+			ip, r.Method, r.URL.Path, rw.status, rw.size, time.Since(start),
 		)
 	})
 }
