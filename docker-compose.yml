@@ -25,7 +25,7 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-    restart: unless-stopped
+    restart: always
 
   # База данных PostgreSQL
   postgres:
@@ -44,7 +44,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-    restart: unless-stopped
+    restart: always
 
   # Веб-интерфейс Adminer
   adminer:
@@ -57,7 +57,7 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-    restart: unless-stopped
+    restart: always
 
 volumes:
   postgres_data:
